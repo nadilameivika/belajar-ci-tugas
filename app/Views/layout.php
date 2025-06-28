@@ -1,7 +1,11 @@
 <?php
 $hlm = "Home";
 if(uri_string()!=""){
-  $hlm = ucwords(uri_string());
+  if(uri_string() == "product-category"){
+    $hlm = "Produk Kategori";
+  } else {
+    $hlm = ucwords(uri_string());
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -53,18 +57,18 @@ if(uri_string()!=""){
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Data Tables</h1>
+      <h1><?php echo $hlm ?></h1>
       <nav>
-      <ol class="breadcrumb">
-  <li class="breadcrumb-item">Home</li>
-  <?php
-	if($hlm!="Home"){
-	  ?>
-	  <li class="breadcrumb-item"><?php echo $hlm?></li> 
-	  <?php
-	}
-  ?> 
-</ol>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Home</li>
+          <?php
+          if($hlm!="Home"){
+            ?>
+            <li class="breadcrumb-item"><?php echo $hlm?></li> 
+            <?php
+          }
+          ?> 
+        </ol>
       </nav>
     </div><!-- End Page Title -->
 

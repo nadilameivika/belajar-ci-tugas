@@ -25,6 +25,12 @@
                 </a>
             </li><!-- End Produk Nav -->
 
+            </li><li class="nav-item">
+                <a class="nav-link <?php echo (uri_string() == 'product-category') ? "" : "collapsed" ?>" href="product-category">
+                    <i class="bi bi-tag"></i> <span>Kategori Produk</span>
+                </a>
+            </li><!-- End Kategori Produk Nav -->
+
             <li class="nav-item">
                 <a class="nav-link <?php echo (uri_string() == 'profile') ? "" : "collapsed" ?>" href="profile">
                     <i class="bi bi-person"></i>

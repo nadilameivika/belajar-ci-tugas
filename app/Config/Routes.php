@@ -20,6 +20,13 @@ $routes->group('produk', ['filter' => 'auth'], function ($routes) {
     $routes->get('download', 'ProdukController::download');
 });
 
+$routes->group('product-category', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'ProdukKategoriController::index');
+    $routes->post('/', 'ProdukKategoriController::create');
+    $routes->post('edit/(:any)', 'ProdukKategoriController::edit/$1');
+    $routes->get('delete/(:any)', 'ProdukKategoriController::delete/$1');
+});
+
 $routes->group('keranjang', ['filter' => 'auth'], function ($routes) {
     $routes->get('', 'TransaksiController::index');
     $routes->post('', 'TransaksiController::cart_add');
