@@ -44,12 +44,22 @@ class ApiController extends ResourceController
 
         if(array_key_exists("Key", $headers)){
             if ($headers["Key"] == $this->apiKey) {
-                $penjualan = $this->transaction->findAll();
                 
-                foreach ($penjualan as &$pj) {
-                    $pj['details'] = $this->transaction_detail->where('transaction_id', $pj['id'])->findAll();
-                }
-
+                // ===== BAGIAN YANG DIPERBAIKI =====
+                // Menggunakan Query Builder dengan nama tabel yang benar ('transaction')
+                $builder = $this->transaction->builder(); 
+                
+                // Memilih semua kolom yang dibutuhkan secara eksplisit
+                $builder->select('transaction.*, SUM(transaction_detail.jumlah) as jumlah_item');
+                
+                $builder->join('transaction_detail', 'transaction_detail.transaction_id = transaction.id', 'left');
+                
+                // Mengelompokkan berdasarkan semua kolom yang dipilih dari tabel 'transaction'
+                $builder->groupBy('transaction.id');
+                
+                $penjualan = $builder->get()->getResult();
+                // ===================================
+                
                 $data['status'] = ["code" => 200, "description" => "OK"];
                 $data['results'] = $penjualan;
 
@@ -58,6 +68,7 @@ class ApiController extends ResourceController
 
         return $this->respond($data);
     }
+
     /**
      * Return the properties of a resource object.
      *
@@ -67,7 +78,7 @@ class ApiController extends ResourceController
      */
     public function show($id = null)
     {
-        //
+        // Tidak digunakan
     }
 
     /**
@@ -77,7 +88,7 @@ class ApiController extends ResourceController
      */
     public function new()
     {
-        //
+        // Tidak digunakan
     }
 
     /**
@@ -87,7 +98,7 @@ class ApiController extends ResourceController
      */
     public function create()
     {
-        //
+        // Tidak digunakan
     }
 
     /**
@@ -99,7 +110,7 @@ class ApiController extends ResourceController
      */
     public function edit($id = null)
     {
-        //
+        // Tidak digunakan
     }
 
     /**
@@ -111,7 +122,7 @@ class ApiController extends ResourceController
      */
     public function update($id = null)
     {
-        //
+        // Tidak digunakan
     }
 
     /**
@@ -123,6 +134,6 @@ class ApiController extends ResourceController
      */
     public function delete($id = null)
     {
-        //
+        // Tidak digunakan
     }
 }

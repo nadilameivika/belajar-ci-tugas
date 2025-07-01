@@ -1,68 +1,86 @@
-# CodeIgniter 4 Application Starter
+# Project Toko - Aplikasi Penjualan Berbasis Web dengan CodeIgniter 4
 
-## What is CodeIgniter?
+## Fitur
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+- **Manajemen Produk**  
+  Pengguna dapat menambah, mengubah, menghapus, dan melihat daftar produk lengkap dengan foto produk.  
+- **Manajemen Kategori Produk**  
+  Pengelolaan kategori produk dengan fitur CRUD (Create, Read, Update, Delete).  
+- **Keranjang Belanja**  
+  Pengguna dapat menambahkan produk ke keranjang, mengubah jumlah produk, menghapus produk dari keranjang, dan mengosongkan keranjang.  
+- **Proses Checkout dan Pembelian**  
+  Pengguna dapat melakukan checkout produk di keranjang, menghitung ongkos kirim menggunakan API RajaOngkir, dan menyelesaikan pembelian yang akan disimpan sebagai transaksi.  
+- **Manajemen Transaksi dan Status Pembelian**  
+  Admin dapat melihat daftar pembelian dan mengubah status pesanan (misalnya dari belum diproses ke selesai).  
+- **Autentikasi User**  
+  Sistem login dan manajemen user untuk mengamankan akses aplikasi.  
+- **Halaman FAQ dan Kontak**  
+  Menyediakan halaman FAQ dan kontak untuk informasi dan bantuan pengguna.  
+- **Fitur Diskon**  
+  Mendukung pemberian diskon pada produk yang dapat diterapkan saat pembelian.  
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Instalasi
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+1. **Persyaratan Sistem**  
+   - PHP versi 8.1 atau lebih tinggi  
+   - Ekstensi PHP yang diperlukan: intl, mbstring, json, mysqlnd, libcurl  
+   - Composer untuk manajemen dependensi  
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+2. **Instalasi Aplikasi**  
+   - Clone atau download repository ini  
+   - Jalankan perintah berikut untuk instalasi dependensi:  
+     ```
+     composer install
+     ```  
+   - Salin file `.env.example` menjadi `.env` dan sesuaikan konfigurasi seperti `baseURL`, pengaturan database, dan API key RajaOngkir (`COST_KEY`).  
 
-## Installation & updates
+3. **Migrasi dan Seed Database**  
+   - Jalankan migrasi database:  
+     ```
+     php spark migrate
+     ```  
+   - Jalankan seeder untuk data awal:  
+     ```
+     php spark db:seed UserSeeder
+     php spark db:seed ProductCategorySeeder
+     php spark db:seed ProductSeeder
+     php spark db:seed DiskonSeeder
+     ```  
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+4. **Konfigurasi Web Server**  
+   - Arahkan root web server ke folder `public` pada project ini untuk keamanan dan pemisahan komponen.  
+   - Contoh konfigurasi virtual host pada Apache atau Nginx diarahkan ke folder `public`.  
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+5. **Menjalankan Aplikasi**  
+   - Jalankan server development CodeIgniter:  
+     ```
+     php spark serve
+     ```  
+   - Akses aplikasi melalui browser di alamat `http://localhost:8080` (atau sesuai konfigurasi `baseURL`).  
 
-## Setup
+## Struktur Proyek
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+- `app/Controllers`  
+  Berisi controller yang mengatur logika aplikasi, seperti pengelolaan produk, kategori, transaksi, autentikasi, dan halaman statis.  
 
-## Important Change with index.php
+- `app/Models`  
+  Model yang berinteraksi dengan database, seperti model produk, kategori produk, transaksi, detail transaksi, diskon, dan user.  
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+- `app/Views`  
+  Folder berisi file tampilan (view) aplikasi, termasuk layout, komponen, dan halaman seperti produk, keranjang, checkout, pembelian, FAQ, dan kontak.  
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+- `app/Database/Migrations`  
+  Skrip migrasi database untuk membuat tabel-tabel yang dibutuhkan aplikasi.  
 
-**Please** read the user guide for a better explanation of how CI4 works!
+- `app/Database/Seeds`  
+  Data awal untuk mengisi tabel database seperti user, kategori produk, produk, dan diskon.  
 
-## Repository Management
+- `app/Config`  
+  Konfigurasi aplikasi CodeIgniter, seperti routing, database, filter, dan layanan lainnya.  
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+- `public/`  
+  Folder publik yang berisi file index.php, aset seperti gambar, CSS, dan JavaScript yang dapat diakses oleh pengguna.  
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+---
 
-## Server Requirements
-
-PHP version 8.1 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+README ini memberikan gambaran lengkap mengenai fitur, cara instalasi, dan struktur proyek aplikasi Toko berbasis CodeIgniter 4.

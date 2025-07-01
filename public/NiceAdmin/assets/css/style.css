@@ -383,9 +383,28 @@ h6 {
   box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
   background-color: #fff;
   padding-left: 20px;
-  /* Toggle Sidebar Button */
-  /* Search Bar */
 }
+
+/* ===== KODE BARU DITAMBAHKAN DI SINI ===== */
+/* Custom Discount Banner Style */
+.header-diskon-banner {
+  padding: 8px 15px;
+  background-color: #d1e7dd;
+  /* Warna hijau muda */
+  color: #0f5132;
+  /* Warna teks hijau tua */
+  border-radius: 8px;
+  /* Sudut melengkung */
+  font-size: 14px;
+  font-weight: 500;
+  /*margin-left: 2px;
+  /* Jarak dari search bar */
+  margin-right: auto;
+  /* Mendorong ikon lain ke kanan */
+  white-space: nowrap;
+  /* Mencegah teks turun baris */
+}
+/* ========================================= */
 
 .header .toggle-sidebar-btn {
   font-size: 32px;
@@ -396,7 +415,7 @@ h6 {
 
 .header .search-bar {
   min-width: 360px;
-  padding: 0 20px;
+  padding: 0 5px 0 20px;
 }
 
 @media (max-width: 1199px) {

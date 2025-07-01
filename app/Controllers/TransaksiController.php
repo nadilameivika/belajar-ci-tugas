@@ -31,18 +31,33 @@ class TransaksiController extends BaseController
         return view('v_keranjang', $data);
     }
 
+    // ========== METHOD YANG DIUBAH ==========
     public function cart_add()
     {
+        // 1. Ambil harga asli dari form
+        $hargaAsli = $this->request->getPost('harga');
+        $hargaFinal = $hargaAsli;
+
+        // 2. Cek apakah ada diskon di session
+        if (session()->has('diskon_hari_ini')) {
+            $diskonNominal = session('diskon_hari_ini')['nominal'];
+            // Kurangi harga asli dengan diskon, pastikan harga tidak menjadi minus
+            $hargaFinal = max(0, $hargaAsli - $diskonNominal);
+        }
+
+        // 3. Masukkan ke keranjang dengan harga final yang sudah dihitung
         $this->cart->insert(array(
-            'id'        => $this->request->getPost('id'),
-            'qty'       => 1,
-            'price'     => $this->request->getPost('harga'),
-            'name'      => $this->request->getPost('nama'),
-            'options'   => array('foto' => $this->request->getPost('foto'))
+            'id'      => $this->request->getPost('id'),
+            'qty'     => 1,
+            'price'   => $hargaFinal, // Gunakan harga final yang sudah didiskon
+            'name'    => $this->request->getPost('nama'),
+            'options' => array('foto' => $this->request->getPost('foto'))
         ));
-        session()->setflashdata('success', 'Produk berhasil ditambahkan ke keranjang. (<a href="' . base_url() . 'keranjang">Lihat</a>)');
+
+        session()->setflashdata('success', 'Produk berhasil ditambahkan ke keranjang. (<a href="' . base_url('keranjang') . '">Lihat</a>)');
         return redirect()->to(base_url('/'));
     }
+    // =======================================
 
     public function cart_clear()
     {
@@ -82,12 +97,13 @@ class TransaksiController extends BaseController
 
     public function getLocation()
     {
-            //keyword pencarian yang dikirimkan dari halaman checkout
+        //keyword pencarian yang dikirimkan dari halaman checkout
         $search = $this->request->getGet('search');
 
         $response = $this->client->request(
-            'GET', 
-            'https://rajaongkir.komerce.id/api/v1/destination/domestic-destination?search='.$search.'&limit=50', [
+            'GET',
+            'https://rajaongkir.komerce.id/api/v1/destination/domestic-destination?search=' . $search . '&limit=50',
+            [
                 'headers' => [
                     'accept' => 'application/json',
                     'key' => $this->apiKey,
@@ -95,20 +111,21 @@ class TransaksiController extends BaseController
             ]
         );
 
-        $body = json_decode($response->getBody(), true); 
+        $body = json_decode($response->getBody(), true);
         return $this->response->setJSON($body['data']);
     }
 
     public function getCost()
-    { 
-            //ID lokasi yang dikirimkan dari halaman checkout
+    {
+        //ID lokasi yang dikirimkan dari halaman checkout
         $destination = $this->request->getGet('destination');
 
-            //parameter daerah asal pengiriman, berat produk, dan kurir dibuat statis
+        //parameter daerah asal pengiriman, berat produk, dan kurir dibuat statis
         //valuenya => 64999 : PEDURUNGAN TENGAH , 1000 gram, dan JNE
         $response = $this->client->request(
-            'POST', 
-            'https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost', [
+            'POST',
+            'https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost',
+            [
                 'multipart' => [
                     [
                         'name' => 'origin',
@@ -134,13 +151,13 @@ class TransaksiController extends BaseController
             ]
         );
 
-        $body = json_decode($response->getBody(), true); 
+        $body = json_decode($response->getBody(), true);
         return $this->response->setJSON($body['data']);
     }
 
     public function buy()
     {
-        if ($this->request->getPost()) { 
+        if ($this->request->getPost()) {
             $dataForm = [
                 'username' => $this->request->getPost('username'),
                 'total_harga' => $this->request->getPost('total_harga'),
@@ -170,7 +187,7 @@ class TransaksiController extends BaseController
             }
 
             $this->cart->destroy();
-    
+
             return redirect()->to(base_url());
         }
     }
