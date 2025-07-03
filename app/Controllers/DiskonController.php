@@ -17,7 +17,9 @@ class DiskonController extends BaseController
 
     public function index()
     {
-        $data = ['diskons' => $this->diskonModel->findAll()];
+        // Menambahkan orderBy() untuk mengurutkan data berdasarkan tanggal
+        $data = ['diskons' => $this->diskonModel->orderBy('tanggal', 'ASC')->findAll()];
+        
         return view('v_diskon', $data);
     }
 
